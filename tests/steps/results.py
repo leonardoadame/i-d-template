@@ -35,9 +35,7 @@ def step_impl(context):
     with cd(context.working_dir):
         md_files = glob("draft-*.md")
         for md in md_files:
-            context.execute_steps(
-                'then gitignore lists "{}"'.format(md.replace(".md", ".xml"))
-            )
+            context.execute_steps(f'then gitignore lists "{md.replace(".md", ".xml")}"')
 
 
 @then("gitignore negation rules come last")
@@ -74,7 +72,7 @@ def step_impl(context):
 def step_impl(context):
     with cd(context.working_dir):
         for md in glob("draft-*.md"):
-            if not "-00.md" in md:
+            if "-00.md" not in md:
                 upload_file = "versioned/." + md.replace(".md", "-00.upload")
                 assert os.path.isfile(upload_file)
 
@@ -96,15 +94,14 @@ def step_impl(context):
 @then('a file is created called "{filename}" which contains "{text}"')
 def step_impl(context, filename, text):
     context.execute_steps(
-        'then a branch is created called "main" containing "%s" which contains "%s"'
-        % (filename, text)
+        f'then a branch is created called "main" containing "{filename}" which contains "{text}"'
     )
 
 
 @then('a file is created called "{filename}"')
 def step_impl(context, filename):
     context.execute_steps(
-        'then a branch is created called "main" containing "%s"' % filename
+        f'then a branch is created called "main" containing "{filename}"'
     )
 
 
@@ -113,12 +110,10 @@ def step_impl(context, filename):
 )
 def step_impl(context, branch, filename, text):
     context.execute_steps(
-        'then a branch is created called "%s" containing "%s"' % (branch, filename)
+        f'then a branch is created called "{branch}" containing "{filename}"'
     )
     with cd(context.working_dir):
-        content = check_output(["git", "show", "%s:%s" % (branch, filename)]).decode(
-            "utf-8"
-        )
+        content = check_output(["git", "show", f"{branch}:{filename}"]).decode("utf-8")
         assert text in content
 
 

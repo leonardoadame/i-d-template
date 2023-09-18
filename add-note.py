@@ -7,8 +7,7 @@ found = False
 frontEnd = re.compile(" *</front>")
 for line in fileinput.input():
     if not found:
-        match = frontEnd.match(line)
-        if match:
+        if match := frontEnd.match(line):
             found = True
             if match.start() > 0:
                 print(line[: match.start()], end="")
