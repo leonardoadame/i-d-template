@@ -79,10 +79,11 @@ def step_impl(context):
 def step_impl(context):
     with cd(context.working_dir):
         random_string = "".join(
-            random.SystemRandom().choice(string.ascii_lowercase) for n in range(8)
+            random.SystemRandom().choice(string.ascii_lowercase)
+            for _ in range(8)
         )
-        draft_name = "draft-behave-template-" + random_string
-        file_name = draft_name + ".md"
+        draft_name = f"draft-behave-template-{random_string}"
+        file_name = f"{draft_name}.md"
         with open(file_name, "wb") as newFile:
             call(
                 [
@@ -94,16 +95,16 @@ def step_impl(context):
                 stdout=newFile,
             )
         call(["git", "add", file_name])
-        call(["git", "commit", "-am", "Initial commit of {}".format(draft_name)])
+        call(["git", "commit", "-am", f"Initial commit of {draft_name}"])
 
 
 @given('a .gitignore with the line "{ignore}"')
 def step_impl(context, ignore):
     with cd(context.working_dir):
         with open(".gitignore", "w") as gi:
-            gi.write("{}\n".format(ignore))
+            gi.write(f"{ignore}\n")
         call(["git", "add", ".gitignore"])
-        call(["git", "commit", "-am", "Create .gitignore with '{}'".format(ignore)])
+        call(["git", "commit", "-am", f"Create .gitignore with '{ignore}'"])
 
 
 @given("pushed to origin/main")

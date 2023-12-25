@@ -12,7 +12,7 @@ def extract_md(filename):
     try:
         with open(filename, "r") as fh:
             section_header = fh.readline().strip()
-            if section_header != r"%%%" and section_header != r"---":
+            if section_header not in [r"%%%", r"---"]:
                 raise Exception(
                     'Unexpected first line in markdown file: got "{section_header}", expected `\%\%\%` or `---` '
                 )
@@ -99,7 +99,7 @@ if __name__ == "__main__":
         metadata = extract_func(filename)
         if target == "abbrev":
             value = metadata.get("abbrev", None)
-            if value == None:
+            if value is None:
                 value = metadata.get("title", "")
         else:
             value = metadata.get(target, "")
